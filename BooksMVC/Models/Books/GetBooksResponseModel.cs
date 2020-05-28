@@ -8,6 +8,7 @@ namespace BooksMVC.Models.Books
     public class GetBooksResponseModel
     {
         public List<BooksResponseItemModel> Books { get; set; }
+        public List<BooksResponseItemModel> BooksNotInInventory { get; set; }
         public int NumberOfBooksInInventory { get; set; }  
         public int NumberOfBooksNotInInventory { get; set; }
 

@@ -18,7 +18,33 @@ namespace BooksMVC.Controllers
             _dataContext = dataContext;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet("/books/{id:int}")]
+        public async Task<IActionResult> Details(int id)
+        {
+            var response = await _dataContext.Books.Where(b => b.Id == id)
+                .Select(b => new GetSingleBookResponseModel
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = b.Author,
+                    InInventory = b.InInventory,
+                    NumberOfPages = b.NumberOfPages
+                })
+                .SingleOrDefaultAsync();
+            if(response == null)
+            {
+                return NotFound("No Book with the Id");
+            }
+            else
+            {
+                return View(response);
+            }
+        }
+
+        // Get /books
+        // Get /books/index
+        // Get /books?showall=true
+        public async Task<IActionResult> Index([FromQuery] bool showall = false)
         {
             //// NO Model. just serializing the domain objects.
             //var response = await _dataContext.Books.Where(b => b.InInventory).ToListAsync();
@@ -35,6 +61,16 @@ namespace BooksMVC.Controllers
                 NumberOfBooksInInventory = await _dataContext.Books.CountAsync(b => b.InInventory),
                 NumberOfBooksNotInInventory = await _dataContext.Books.CountAsync(b => b.InInventory == false)
             };
+            if(showall)
+            {
+                response.BooksNotInInventory = await _dataContext.Books.Where(b => b.InInventory == false)
+                    .Select(b => new BooksResponseItemModel
+                    {
+                        Id = b.Id,
+                        Title = b.Title,
+                        Author = b.Author
+                    }).ToListAsync();
+            }
             return View(response);
         }
     }
