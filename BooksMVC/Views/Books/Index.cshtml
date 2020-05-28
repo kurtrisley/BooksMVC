@@ -1,7 +1,16 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model BooksMVC.Models.Books.GetBooksResponseModel
+
 
 <h2>Our Huge Selection of Books</h2>
+
+<ul class="list-unstyled">
+    @foreach(var book in Model.Books)
+    {
+        <li>@book.Title by @book.Author</li>
+    }
+</ul>
+
+<div class="alert alert-info">
+    <p>There are @Model.NumberOfBooksInInventory books in inventory
+    (We have @Model.NumberOfBooksNotInInventory currently out)</p>
+</div>
