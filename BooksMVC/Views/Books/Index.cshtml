@@ -3,22 +3,33 @@
 
 <h2>Our Huge Selection of Books</h2>
 
+@if (ViewData["sale"] != null)
+{
+    <div class="alert alert-success">
+        <h3>@ViewData["sale"]</h3>
+    </div>
+}
+
 <ul class="list-unstyled">
-    @foreach(var book in Model.Books)
+    @foreach (var book in Model.Books)
     {
-        <li>@book.Title by @book.Author <a asp-controller="Books" asp-action="Details" 
-                                           asp-route-id="@book.Id" >Details</a></li>
+        <li>
+            @book.Title by @book.Author <a asp-controller="Books" asp-action="Details"
+                                           asp-route-id="@book.Id">Details</a>
+        </li>
     }
 </ul>
 
-@if(Model.BooksNotInInventory != null)
+@if (Model.BooksNotInInventory != null)
 {
     <h3>The following books are not in Inventory</h3>
     <ul class="list-unstyled">
         @foreach (var book in Model.BooksNotInInventory)
         {
-        <li>@book.Title by @book.Author <a asp-controller="Books" asp-action="Details" 
-                                           asp-route-bookId="@book.Id">Details</a></li>
+            <li>
+                @book.Title by @book.Author <a asp-controller="Books" asp-action="Details"
+                                               asp-route-bookId="@book.Id">Details</a>
+            </li>
         }
     </ul>
 }
@@ -31,7 +42,7 @@
 </div>
 
 
-@{ 
+@{
     bool DisableShowOnlyInInventory = Model.BooksNotInInventory == null;
     bool DisableShowAll = Model.BooksNotInInventory != null;
 }
@@ -41,8 +52,8 @@
     {
         <a asp-controller="Books" asp-action="Index" asp-route-showall="false" class="btn btn-secondary">Show Only In Inventory</a>
     }
-    @if (DisableShowAll)
+    @if (DisableShowOnlyInInventory)
     {
         <a asp-controller="Books" asp-action="Index" asp-route-showall="true" class="btn btn-secondary">Show Both In and Out Of Inventory</a>
-    }  
+    }
 </div>
